@@ -19,16 +19,16 @@
 int hash(char*);
 
 typedef struct _fdata {
-	int fd;
-	void* buf;
-	size_t count;
+	char path[256];
+	size_t offset;
+	size_t length;
 } fdata;
 
-fdata* new_fdata(int fd, void* buffer, size_t count) {
+fdata* new_fdata(char* path, size_t offset, size_t length) {
 	fdata* newfdata = (fdata*)malloc(sizeof(fdata));
-	newfdata->fd = fd;
-	newfdata->buf = buffer;
-	newfdata->count = count;
+	strcpy(newfdata->path, path);
+	newfdata->offset = offset;
+	newfdata->length = length;
 	return newfdata;
 }
 typedef struct b_tree{
@@ -38,17 +38,29 @@ typedef struct b_tree{
 	void* data;
 } b_tree;
 
-b_tree* b_init(int key){
+void b_init(b_tree* bt){
 	b_tree* newb = (b_tree*)malloc(sizeof(b_tree));
-	newb->key = key;
+	newb->key = 0ULL;
 	newb->left = NULL;
 	newb->right = NULL;
 	newb->data = NULL;
-	return newb;
+	// return newb;
 }
 
 void b_insert(b_tree* root, b_tree* newb){
-	
+	int key = newb->key;
+	b_tree* temp = root;
+	while(temp == NULL){
+		if(temp->key == key){
+			/* temp->data->offset, length */
+		}
+		else if(temp->key > key){
+			temp = temp->left;
+		}
+		else{
+			temp = temp->right;
+		}
+	}
 }
 
 typedef union {
