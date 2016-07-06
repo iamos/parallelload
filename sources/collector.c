@@ -2,6 +2,7 @@
 
 static int log_fd;
 
+/*
 void* do_log(void* data) {
 	fdata* args = (fdata*)data;
 	size_t f_offset = lseek(args->fd, 0, SEEK_CUR);
@@ -18,7 +19,7 @@ void* do_log(void* data) {
 	dprintf(log_fd, "%s,%zu,%zu\n", fpath, f_offset, args->count);
 	pthread_exit((void*)0);
 }
-
+*/
 int __libc_start_main(int (*main) (int, char **, char **), int argc, char **ubp_av,
                       void (*init) (void), void (*fini)(void), void (*rtld_fini)(void), void (*stack_end)) {
 	int (*original__libc_start_main)(int (*main) (int, char **, char **), int argc, char **ubp_av,
