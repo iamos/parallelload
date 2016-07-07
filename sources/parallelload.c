@@ -11,18 +11,12 @@ void* do_posix_fadvise(void* data) {
 	pthread_exit((void*)0);
 }
 
-void* do_hi(void* args) {
-	printf("HI, i'm child\n");
-	pthread_exit((void*)0);
-	return NULL;
-}
-
 void* do_load(void* args) {
 	// Find targets by args
 	// IF Find; do_posix_fadvise
 	// Else; pthread_exit();
 	fdata* data = b_find_f(b_root, *(int*)args);
-	if( data != NULL){
+	if ( data != NULL) {
 		// using thread or not
 		int fd = open(data->path, O_RDONLY);
 		posix_fadvise(fd, data->offset, data->length, POSIX_FADV_WILLNEED);
@@ -106,5 +100,34 @@ ssize_t read(int fd, void *buf, size_t count) {
 	}
 	original_read = dlsym(RTLD_NEXT, "read");
 	ret = (*original_read)(fd, buf, count);
+	return ret;
+}
+
+size_t fread(void* ptr, size_t size, size_t nmemb, FILE *stream) {
+	size_t (*original_fread)(void *ptr, size_t size, size_t nmemb, FILE * stream);
+	size_t ret;
+
+	int pid = getpid();
+	int fd = fileno(stream);
+	char procpath[255];
+	char fpath[255];
+	memset(procpath, '\0', 255);
+	memset(fpath, '\0', 255);
+	sprintf(procpath, "/proc/%d/fd/%d", pid, fd);
+	if (readlink(procpath, fpath, 255) < 0) {
+		perror("readlink Error");
+	}
+	int my_key = hash(fpath);
+	if (last_hash != my_key) {
+		last_hash = my_key;
+		pthread_t load_thread;
+		if ( pthread_create(&load_thread, NULL, do_load, (void*)&my_key ) < 0) {
+			perror("Error : pthread_create ( load_thread )");
+		}
+		// pthread_join(load_thread, NULL);
+	}
+
+	original_fread = dlsym(RTLD_NEXT, "fread");
+	ret = (*original_fread)(ptr, size, nmemb, stream);
 	return ret;
 }
