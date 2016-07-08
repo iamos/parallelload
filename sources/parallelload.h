@@ -22,13 +22,18 @@ typedef struct _fdata {
 	char path[256];
 	size_t offset;
 	size_t length;
+	/* fdata* next*/
 } fdata;
 
 fdata* new_fdata(char* path, size_t offset, size_t length) {
+	static int counter = 0;
+	printf("new_fdata [%d]\n");
+	counter ++;
 	fdata* newfdata = (fdata*)malloc(sizeof(fdata));
 	strcpy(newfdata->path, path);
 	newfdata->offset = offset;
 	newfdata->length = length;
+	//newfdata->next = NULL;
 	return newfdata;
 }
 typedef struct b_tree {
@@ -39,6 +44,9 @@ typedef struct b_tree {
 } b_tree;
 
 b_tree* b_init(int key, fdata* data) {
+	static int counter = 0;
+	printf("b_init [%d] \n");
+	counter ++;
 	b_tree* newb = (b_tree*)malloc(sizeof(b_tree));
 	newb->key = key;
 	newb->left = NULL;
