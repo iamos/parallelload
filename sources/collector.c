@@ -44,15 +44,12 @@ ssize_t read(int fd, void *buf, size_t count) {
 size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream) {
 	size_t (*original_fread)(void *ptr, size_t size, size_t nmemb, FILE * stream);
 	size_t ret;
-	
 
 	pid_t pid = getpid();
 	char proc_path[255];
 	char fpath[255];
 	loff_t stream_offset;
-	int fd;
-
-	fd = fileno(stream);
+	int fd = fileno(stream);
 
 	sprintf(proc_path, "/proc/%d/fd/%d", pid, fd);
 	memset(fpath, '\0', sizeof(fpath));

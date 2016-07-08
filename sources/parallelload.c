@@ -20,7 +20,7 @@ void* do_load(void* args) {
 	if ( data != NULL) {
 		int fd = open(data->path, O_RDONLY);
 		/*
-		for (count = 0;data != NULL;count ++){
+		for (count = 0;count < n && data != NULL;count ++){
 			posix_fadvise(fd, data->offset, data->length, POSIX_FADV_WILLNEED);
 			data = data->next;
 			}

@@ -27,7 +27,7 @@ typedef struct _fdata {
 
 fdata* new_fdata(char* path, size_t offset, size_t length) {
 	static int counter = 0;
-	printf("new_fdata [%d]\n");
+	printf("new_fdata [%d]\n", counter);
 	counter ++;
 	fdata* newfdata = (fdata*)malloc(sizeof(fdata));
 	strcpy(newfdata->path, path);
@@ -45,7 +45,7 @@ typedef struct b_tree {
 
 b_tree* b_init(int key, fdata* data) {
 	static int counter = 0;
-	printf("b_init [%d] \n");
+	printf("b_init [%d] \n", counter);
 	counter ++;
 	b_tree* newb = (b_tree*)malloc(sizeof(b_tree));
 	newb->key = key;
